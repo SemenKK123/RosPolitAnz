@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Мониторинг политических партий РФ</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="parties.html">Список партий</a></li>
+                <li><a href="ratings.html">Рейтинги партий</a></li>
+                <li><a href="news.html">Новости партий</a></li>
+                <li><a href="profile.html">Профиль</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Добро пожаловать!</h2>
+            <p>Это веб-приложение позволяет отслеживать рейтинги и новости политических партий России.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Мониторинг политических партий РФ</p>
+    </footer>
+
+    <script>
+        window.onload = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Вы не авторизованы. Пожалуйста, войдите в систему.');
+                window.location.href = 'login.html';
+            }
+        };
+    </script>
+</body>
+</html>
