@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Профиль</h1>
+    </header>
+
+    <main>
+        <section id="profile-section">
+            <p id="profile-message">Загрузка данных...</p>
+            <button id="logout-btn">Выйти</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Мониторинг политических партий РФ</p>
+    </footer>
+
+    <script>
+        // Проверка токена при загрузке страницы
+        window.onload = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Вы не авторизованы. Пожалуйста, войдите в систему.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/profile', {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('profile-message').textContent = `Привет, ${result.user.userId}!`;
+                } else {
+                    alert(result.message);
+                    window.location.href = 'login.html';
+                }
+            } catch (error) {
+                console.error('Ошибка при получении профиля:', error);
+                alert('Произошла ошибка. Пожалуйста, войдите снова.');
+                window.location.href = 'login.html';
+            }
+        };
+
+        // Обработка выхода
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            alert('Вы вышли из системы.');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

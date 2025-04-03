@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Опрос</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Опрос</h1>
+    </header>
+
+    <main>
+        <section id="poll-section">
+            <h2>За какую партию вы голосуете?</h2>
+            <form id="poll-form">
+                <label>
+                    <input type="radio" name="party" value="edinaya-rossiya" required> Единая Россия
+                </label><br>
+                <label>
+                    <input type="radio" name="party" value="kprf" required> КПРФ
+                </label><br>
+                <label>
+                    <input type="radio" name="party" value="ldpr" required> ЛДПР
+                </label><br>
+                <label>
+                    <input type="radio" name="party" value="sprr" required> Справедливая Россия – За правду
+                </label><br>
+                <label>
+                    <input type="radio" name="party" value="novye-lyudi" required> Новые Люди
+                </label><br>
+                <button type="submit">Голосовать</button>
+            </form>
+            <p id="vote-message"></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Мониторинг политических партий РФ</p>
+    </footer>
+
+    <script>
+        document.getElementById('poll-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const selectedParty = document.querySelector('input[name="party"]:checked').value;
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                alert('Вы не авторизованы. Пожалуйста, войдите в систему.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/poll/vote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ party: selectedParty }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('vote-message').textContent = result.message;
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error('Ошибка при отправке голоса:', error);
+                alert('Не удалось отправить голос. Пожалуйста, попробуйте позже.');
+            }
+        });
+    </script>
+</body>
+</html>

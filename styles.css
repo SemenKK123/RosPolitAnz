@@ -1,0 +1,508 @@
+/* Общие настройки */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --background-color: #f8f9fa;
+    --text-color: #343a40;
+    --hover-color: #0056b3;
+    --gradient-start: #007bff;
+    --gradient-end: #0056b3;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+    color: var(--text-color);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 0.5rem;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+}
+
+main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+section:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    font-size: 2rem;
+}
+
+/* Стиль для графика рейтингов */
+#ratingChart {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+}
+
+/* Стиль для таблицы рейтингов */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    border: 1px solid var(--secondary-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table th,
+table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+}
+
+table th {
+    background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+    color: white;
+    font-weight: bold;
+}
+
+article {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+article:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+article h2 {
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+footer {
+    background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: auto;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Адаптивность */
+
+/* Для маленьких экранов (мобильные устройства) */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        margin-bottom: 0.5rem;
+    }
+
+    section {
+        padding: 1rem;
+    }
+
+    .parties-list,
+    .news-articles {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+/* Для экранов 4:3 (например, 1024x768) */
+@media (aspect-ratio: 4/3) {
+    main {
+        padding: 2.5rem;
+    }
+
+    .parties-list,
+    .news-articles {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    table {
+        font-size: 1rem;
+    }
+}
+
+/* Для больших экранов */
+@media (min-width: 1200px) {
+    header h1 {
+        font-size: 3rem;
+    }
+
+    .parties-list,
+    .news-articles {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+    }
+
+    section {
+        padding: 2rem;
+    }
+}
+
+/* Стиль для главной страницы (index.html) */
+.index-main {
+    text-align: center;
+    margin-top: 10rem;
+}
+
+.index-main h2 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    animation: fadeIn 2s ease-in-out;
+}
+
+.index-main p {
+    font-size: 1.3rem;
+    color: var(--secondary-color);
+    max-width: 800px;
+    margin: 1rem auto;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Стиль для списка партий (parties.html) */
+.parties-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.parties-list li {
+    list-style: none;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    position: relative;
+}
+
+.parties-list li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 123, 255, 0.1);
+    border-radius: 12px;
+    z-index: -1;
+    transition: transform 0.3s ease;
+}
+
+.parties-list li:hover::before {
+    transform: scale(1.1);
+}
+
+.parties-list a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.parties-list a:hover {
+    color: var(--hover-color);
+}
+
+/* Стиль для новостей (news.html) */
+.news-articles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.news-articles article {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news-articles article:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.news-articles img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.news-articles img:hover {
+    transform: scale(1.1);
+}
+
+.news-articles h2 {
+    margin: 0.5rem 0;
+    font-size: 1.3rem;
+    color: var(--primary-color);
+}
+
+/* Стиль для детальной информации о партии (party-details.html) */
+.party-details {
+    margin-top: 2rem;
+}
+
+#party-name {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.party-description {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+.key-figures,
+.party-news,
+.achievements {
+    list-style: none;
+    padding-left: 0;
+}
+
+.key-figures li,
+.party-news li,
+.achievements li {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+.party-news li strong {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.achievements li::before {
+    content: '✔️'; /* Иконка галочки перед каждым пунктом */
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+}
+
+/* Стиль для формы регистрации и входа */
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+form input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+}
+
+form button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: var(--hover-color);
+}
+
+/* Стиль для выпадающего списка фильтров */
+.filter-container {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.filter-container label {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+    color: var(--text-color);
+}
+
+.filter-container select {
+    padding: 0.5rem;
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.filter-container select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Стиль для страницы опроса (poll.html) */
+#pollChart {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+}
+
+.poll-section form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.poll-section label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.poll-section input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+.poll-section button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.poll-section button:hover {
+    background-color: var(--hover-color);
+}
+
+/* Стиль для страницы рейтингов (ratings.html) */
+#ratingTableBody {
+    font-size: 1rem;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Кастомные скроллбары */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--hover-color);
+}
