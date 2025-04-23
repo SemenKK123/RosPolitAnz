@@ -8,7 +8,17 @@
 </head>
 <body>
     <header>
-        <h1>Профиль</h1>
+        <h1>Мониторинг политических партий РФ</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="parties.html">Список партий</a></li>
+                <li><a href="poll.html">Опрос</a></li>
+                <li><a href="ratings.html">Рейтинги</a></li>
+                <li><a href="news.html">Новости</a></li>
+                <li><a href="profile.html">Профиль</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main>
@@ -19,27 +29,24 @@
     </main>
 
     <footer>
-        <p>&copy; 2023 Мониторинг политических партий РФ</p>
+        <p>&copy; 2025 Мониторинг политических партий РФ</p>
     </footer>
 
     <script>
-        // Проверка токена при загрузке страницы
         window.onload = async () => {
             const token = localStorage.getItem('token');
             if (!token) {
-                alert('Вы не авторизованы. Пожалуйста, войдите в систему.');
+                alert('Вы не авторизованы.');
                 window.location.href = 'login.html';
                 return;
             }
 
             try {
                 const response = await fetch('http://localhost:3000/api/profile', {
-                    method: 'GET',
                     headers: { 'Authorization': `Bearer ${token}` },
                 });
 
                 const result = await response.json();
-
                 if (response.ok) {
                     document.getElementById('profile-message').textContent = `Привет, ${result.user.userId}!`;
                 } else {
@@ -47,13 +54,10 @@
                     window.location.href = 'login.html';
                 }
             } catch (error) {
-                console.error('Ошибка при получении профиля:', error);
-                alert('Произошла ошибка. Пожалуйста, войдите снова.');
-                window.location.href = 'login.html';
+                alert('Ошибка при загрузке профиля.');
             }
         };
 
-        // Обработка выхода
         document.getElementById('logout-btn').addEventListener('click', () => {
             localStorage.removeItem('token');
             alert('Вы вышли из системы.');

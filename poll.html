@@ -8,28 +8,43 @@
 </head>
 <body>
     <header>
-        <h1>Опрос</h1>
+        <h1>Мониторинг политических партий РФ</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="parties.html">Список партий</a></li>
+                <li><a href="poll.html">Опрос</a></li>
+                <li><a href="ratings.html">Рейтинги</a></li>
+                <li><a href="news.html">Новости</a></li>
+                <li><a href="profile.html">Профиль</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main>
         <section id="poll-section">
             <h2>За какую партию вы голосуете?</h2>
             <form id="poll-form">
-                <label>
-                    <input type="radio" name="party" value="edinaya-rossiya" required> Единая Россия
-                </label><br>
-                <label>
-                    <input type="radio" name="party" value="kprf" required> КПРФ
-                </label><br>
-                <label>
-                    <input type="radio" name="party" value="ldpr" required> ЛДПР
-                </label><br>
-                <label>
-                    <input type="radio" name="party" value="sprr" required> Справедливая Россия – За правду
-                </label><br>
-                <label>
-                    <input type="radio" name="party" value="novye-lyudi" required> Новые Люди
-                </label><br>
+                <div class="poll-option">
+                    <input type="radio" id="edinaya-rossiya" name="party" value="edinaya-rossiya" required>
+                    <label for="edinaya-rossiya">Единая Россия</label>
+                </div>
+                <div class="poll-option">
+                    <input type="radio" id="kprf" name="party" value="kprf" required>
+                    <label for="kprf">КПРФ</label>
+                </div>
+                <div class="poll-option">
+                    <input type="radio" id="ldpr" name="party" value="ldpr" required>
+                    <label for="ldpr">ЛДПР</label>
+                </div>
+                <div class="poll-option">
+                    <input type="radio" id="sprr" name="party" value="sprr" required>
+                    <label for="sprr">Справедливая Россия – За правду</label>
+                </div>
+                <div class="poll-option">
+                    <input type="radio" id="novye-lyudi" name="party" value="novye-lyudi" required>
+                    <label for="novye-lyudi">Новые Люди</label>
+                </div>
                 <button type="submit">Голосовать</button>
             </form>
             <p id="vote-message"></p>
@@ -37,18 +52,17 @@
     </main>
 
     <footer>
-        <p>&copy; 2023 Мониторинг политических партий РФ</p>
+        <p>&copy; 2025 Мониторинг политических партий РФ</p>
     </footer>
 
     <script>
         document.getElementById('poll-form').addEventListener('submit', async (event) => {
             event.preventDefault();
-
-            const selectedParty = document.querySelector('input[name="party"]:checked').value;
+            const party = document.querySelector('input[name="party"]:checked').value;
             const token = localStorage.getItem('token');
 
             if (!token) {
-                alert('Вы не авторизованы. Пожалуйста, войдите в систему.');
+                alert('Вы не авторизованы.');
                 return;
             }
 
@@ -59,19 +73,13 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`,
                     },
-                    body: JSON.stringify({ party: selectedParty }),
+                    body: JSON.stringify({ party }),
                 });
 
                 const result = await response.json();
-
-                if (response.ok) {
-                    document.getElementById('vote-message').textContent = result.message;
-                } else {
-                    alert(result.message);
-                }
+                document.getElementById('vote-message').textContent = result.message;
             } catch (error) {
-                console.error('Ошибка при отправке голоса:', error);
-                alert('Не удалось отправить голос. Пожалуйста, попробуйте позже.');
+                alert('Ошибка при голосовании.');
             }
         });
     </script>

@@ -8,32 +8,33 @@
 </head>
 <body>
     <header>
-        <h1>Вход</h1>
+        <h1>Мониторинг политических партий РФ</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="parties.html">Список партий</a></li>
+                <li><a href="poll.html">Опрос</a></li>
+                <li><a href="ratings.html">Рейтинги</a></li>
+                <li><a href="news.html">Новости</a></li>
+                <li><a href="profile.html">Профиль</a></li>
+            </ul>
+        </nav>
     </header>
-
     <main>
         <section id="login-section">
             <form id="login-form">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="password">Пароль:</label>
-                <input type="password" id="password" name="password" required>
-
-                <button type="submit">Войти</button>
+                <label>Email:</label><input type="email" id="email" name="email" required>
+                <label>Пароль:</label><input type="password" id="password" name="password" required>
+                <button>Войти</button>
                 <p>Нет аккаунта? <a href="register.html">Зарегистрироваться</a></p>
             </form>
         </section>
     </main>
-
-    <footer>
-        <p>&copy; 2023 Мониторинг политических партий РФ</p>
-    </footer>
+    <footer>&copy; 2025 Мониторинг политических партий РФ</footer>
 
     <script>
         document.getElementById('login-form').addEventListener('submit', async (event) => {
             event.preventDefault();
-
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
@@ -45,21 +46,15 @@
                 });
 
                 const result = await response.json();
-
                 if (response.ok) {
-                    alert(result.message);
-
-                    // Сохраняем токен в localStorage
                     localStorage.setItem('token', result.token);
-
-                    // Перенаправляем пользователя на главную страницу
+                    alert(result.message);
                     window.location.href = 'index.html';
                 } else {
                     alert(result.message);
                 }
             } catch (error) {
-                console.error('Ошибка при отправке запроса:', error);
-                alert('Не удалось связаться с сервером. Пожалуйста, попробуйте позже.');
+                alert('Ошибка при входе.');
             }
         });
     </script>

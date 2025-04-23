@@ -19,7 +19,7 @@ mongoose.connect('mongodb://localhost:27017/political_monitoring', {
     .then(() => console.log('Подключено к MongoDB'))
     .catch((err) => console.error('Ошибка подключения к MongoDB:', err));
 
-// Модель пользователя
+// Модели
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -28,110 +28,74 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-// Модель для результатов опроса
 const pollSchema = new mongoose.Schema({
-    party: { type: String, required: true }, // Название партии
-    votes: { type: Number, default: 0 },    // Количество голосов
+    party: { type: String, required: true }, // Сохраняем английские названия партий
+    votes: { type: Number, default: 0 },
 });
 
 const Poll = mongoose.model('Poll', pollSchema);
 
-// Модель для отслеживания голосов пользователя
 const userVoteSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    lastVoteDate: { type: Date, default: null }, // Дата последнего голосования
+    lastVoteDate: { type: Date, default: null },
 });
 
 const UserVote = mongoose.model('UserVote', userVoteSchema);
 
 // Middleware для проверки токена
 function authenticateToken(req, res, next) {
-    const token = req.headers['authorization']?.split(' ')[1]; // Получаем токен из заголовка Authorization
-
-    if (!token) {
-        return res.status(401).json({ message: 'Доступ запрещен. Отсутствует токен.' });
-    }
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) return res.status(401).json({ message: 'Доступ запрещен.' });
 
     jwt.verify(token, 'your_secret_key', (err, user) => {
-        if (err) {
-            return res.status(403).json({ message: 'Недействительный токен.' });
-        }
-
-        req.user = user; // Добавляем пользователя в запрос
-        next(); // Переходим к следующему middleware
+        if (err) return res.status(403).json({ message: 'Недействительный токен.' });
+        req.user = user;
+        next();
     });
 }
 
-// Роут для регистрации
+// Роуты
 app.post('/api/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
-
-        // Проверяем, существует ли пользователь с таким email
         const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(409).json({ message: 'Пользователь с таким email уже существует.' });
-        }
+        if (existingUser) return res.status(409).json({ message: 'Пользователь уже существует.' });
 
-        // Хешируем пароль
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Создаем нового пользователя
         const newUser = new User({ username, email, password: hashedPassword });
         await newUser.save();
-
         res.status(201).json({ message: 'Регистрация успешна!' });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Ошибка сервера.' });
     }
 });
 
-// Роут для входа
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-
-        // Находим пользователя по email
         const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(401).json({ message: 'Неверный email или пароль.' });
-        }
+        if (!user) return res.status(401).json({ message: 'Неверный email или пароль.' });
 
-        // Сверяем пароль
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(401).json({ message: 'Неверный email или пароль.' });
-        }
+        if (!isMatch) return res.status(401).json({ message: 'Неверный email или пароль.' });
 
-        // Генерируем JWT-токен
         const token = jwt.sign({ userId: user._id }, 'your_secret_key', { expiresIn: '1h' });
-
         res.json({ message: 'Вход выполнен успешно!', token });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Ошибка сервера.' });
     }
 });
 
-// Роут для голосования
 app.post('/api/poll/vote', authenticateToken, async (req, res) => {
     try {
         const { party } = req.body;
         const userId = req.user.userId;
 
-        // Проверяем, голосовал ли пользователь в этом месяце
         const userVote = await UserVote.findOne({ userId });
-        if (userVote && userVote.lastVoteDate) {
-            const lastVoteMonth = userVote.lastVoteDate.getMonth();
-            const currentMonth = new Date().getMonth();
-
-            if (lastVoteMonth === currentMonth) {
-                return res.status(403).json({ message: 'Вы уже проголосовали в этом месяце.' });
-            }
+        if (userVote && userVote.lastVoteDate.getMonth() === new Date().getMonth()) {
+            return res.status(403).json({ message: 'Вы уже проголосовали в этом месяце.' });
         }
 
-        // Обновляем или создаем запись о голосовании пользователя
         if (!userVote) {
             await new UserVote({ userId, lastVoteDate: new Date() }).save();
         } else {
@@ -139,7 +103,6 @@ app.post('/api/poll/vote', authenticateToken, async (req, res) => {
             await userVote.save();
         }
 
-        // Обновляем количество голосов для выбранной партии
         const poll = await Poll.findOne({ party });
         if (poll) {
             poll.votes += 1;
@@ -150,12 +113,10 @@ app.post('/api/poll/vote', authenticateToken, async (req, res) => {
 
         res.json({ message: 'Голос успешно учтен!' });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Ошибка сервера.' });
     }
 });
 
-// Получение результатов опроса
 app.get('/api/poll/results', async (req, res) => {
     try {
         const results = await Poll.find();
@@ -166,21 +127,12 @@ app.get('/api/poll/results', async (req, res) => {
     }
 });
 
-// Пример защищенного маршрута
-app.get('/api/profile', authenticateToken, (req, res) => {
-    res.json({ message: 'Это ваш профиль!', user: req.user });
-});
-
-// Инициализация данных опроса при старте сервера
+// Запуск сервера
 app.listen(process.env.PORT || 3000, async () => {
     console.log(`Сервер запущен на порту ${process.env.PORT || 3000}`);
-
-    // Создаем записи для всех партий, если их нет
-    const parties = ['edinaya-rossiya', 'kprf', 'ldpr', 'sprr', 'novye-lyudi'];
+    const parties = ['edinaya_rossiya', 'kprf', 'ldpr', 'sprr', 'novye_lyudi'];
     for (const party of parties) {
         const existingPoll = await Poll.findOne({ party });
-        if (!existingPoll) {
-            await new Poll({ party, votes: 0 }).save();
-        }
+        if (!existingPoll) await new Poll({ party, votes: 0 }).save();
     }
 });

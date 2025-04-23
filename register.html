@@ -8,35 +8,34 @@
 </head>
 <body>
     <header>
-        <h1>Регистрация</h1>
+        <h1>Мониторинг политических партий РФ</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="parties.html">Список партий</a></li>
+                <li><a href="poll.html">Опрос</a></li>
+                <li><a href="ratings.html">Рейтинги</a></li>
+                <li><a href="news.html">Новости</a></li>
+                <li><a href="profile.html">Профиль</a></li>
+            </ul>
+        </nav>
     </header>
-
     <main>
         <section id="register-section">
             <form id="register-form">
-                <label for="username">Имя пользователя:</label>
-                <input type="text" id="username" name="username" required>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="password">Пароль:</label>
-                <input type="password" id="password" name="password" required>
-
-                <button type="submit">Зарегистрироваться</button>
+                <label>Имя:</label><input type="text" id="username" name="username" required>
+                <label>Email:</label><input type="email" id="email" name="email" required>
+                <label>Пароль:</label><input type="password" id="password" name="password" required>
+                <button>Зарегистрироваться</button>
                 <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
             </form>
         </section>
     </main>
-
-    <footer>
-        <p>&copy; 2023 Мониторинг политических партий РФ</p>
-    </footer>
+    <footer>&copy; 2025 Мониторинг политических партий РФ</footer>
 
     <script>
         document.getElementById('register-form').addEventListener('submit', async (event) => {
             event.preventDefault();
-
             const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -49,7 +48,6 @@
                 });
 
                 const result = await response.json();
-
                 if (response.ok) {
                     alert(result.message);
                     window.location.href = 'login.html';
@@ -57,8 +55,7 @@
                     alert(result.message);
                 }
             } catch (error) {
-                console.error('Ошибка при отправке запроса:', error);
-                alert('Не удалось связаться с сервером. Пожалуйста, попробуйте позже.');
+                alert('Ошибка при регистрации.');
             }
         });
     </script>

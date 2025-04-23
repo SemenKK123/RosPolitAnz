@@ -8,25 +8,85 @@
 </head>
 <body>
     <header>
-        <h1>Список политических партий РФ</h1>
+        <h1>Мониторинг политических партий РФ</h1>
         <nav>
             <ul>
                 <li><a href="index.html">Главная</a></li>
-                <li><a href="ratings.html">Рейтинги партий</a></li>
-                <li><a href="news.html">Новости партий</a></li>
+                <li><a href="parties.html">Список партий</a></li>
+                <li><a href="poll.html">Опрос</a></li>
+                <li><a href="ratings.html">Рейтинги</a></li>
+                <li><a href="news.html">Новости</a></li>
+                <li><a href="profile.html">Профиль</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <section>
-            <ul class="parties-list">
-                <li><a href="party-details.html?party=edinaya-rossiya">Единая Россия</a></li>
-                <li><a href="party-details.html?party=kprf">КПРФ</a></li>
-                <li><a href="party-details.html?party=ldpr">ЛДПР</a></li>
-                <li><a href="party-details.html?party=sprr">Справедливая Россия – За правду</a></li>
-                <li><a href="party-details.html?party=novye-lyudi">Новые Люди</a></li> <!-- Добавляем Новые Люди -->
-            </ul>
+        <section id="parties-section">
+            <h2 class="parties-title">Политические партии России</h2>
+
+            <!-- Карточки партий -->
+            <div class="party-cards-container">
+                <!-- Карточка "Единая Россия" -->
+                <div class="party-card">
+                    <img src="/logo/edinaya_rossiya_logo.png" alt="Логотип Единой России" class="party-logo">
+                    <h3>Единая Россия</h3>
+                    <p>Крупнейшая политическая партия России, основанная в 2001 году. Фокусируется на социально-экономическом развитии страны и поддержке граждан.</p>
+                    <ul class="key-figures">
+                        <li>Дмитрий Медведев — председатель партии</li>
+                        <li>Андрей Турчак — секретарь генерального совета</li>
+                    </ul>
+                    <a href="https://er.ru" target="_blank" class="party-link">Официальный сайт</a>
+                </div>
+
+                <!-- Карточка "КПРФ" -->
+                <div class="party-card">
+                    <img src="/logo/kprf_logo.jpg" alt="Логотип КПРФ" class="party-logo">
+                    <h3>КПРФ</h3>
+                    <p>Коммунистическая партия Российской Федерации, основанная в 1993 году. Основные направления работы: социальная справедливость и защита прав трудящихся.</p>
+                    <ul class="key-figures">
+                        <li>Геннадий Зюганов — лидер партии</li>
+                        <li>Валерий Рашкин — член Центрального комитета</li>
+                    </ul>
+                    <a href="https://kprf.ru" target="_blank" class="party-link">Официальный сайт</a>
+                </div>
+
+                <!-- Карточка "ЛДПР" -->
+                <div class="party-card">
+                    <img src="/logo/ldpr_logo.jpg" alt="Логотип ЛДПР" class="party-logo">
+                    <h3>ЛДПР</h3>
+                    <p>Либерально-демократическая партия России, основанная в 1991 году. Известна своими радикальными предложениями и защитой интересов граждан.</p>
+                    <ul class="key-figures">
+                        <li>Жириновский Владимир Вольфович — основатель партии</li>
+                        <li>Леонид Слуцкий — руководитель фракции</li>
+                    </ul>
+                    <a href="https://ldpr.ru" target="_blank" class="party-link">Официальный сайт</a>
+                </div>
+
+                <!-- Карточка "Справедливая Россия – За правду" -->
+                <div class="party-card">
+                    <img src="/logo/sr_logo.png" alt="Логотип Справедливой России" class="party-logo">
+                    <h3>Справедливая Россия – За правду</h3>
+                    <p>Партия, объединяющая сторонников социальной справедливости и защиты прав граждан. Основные направления: борьба с коррупцией и поддержка малообеспеченных слоев населения.</p>
+                    <ul class="key-figures">
+                        <li>Михаил Емельянов — лидер партии</li>
+                        <li>Сергей Миронов — председатель партии</li>
+                    </ul>
+                    <a href="https://spravedlivo.ru" target="_blank" class="party-link">Официальный сайт</a>
+                </div>
+
+                <!-- Карточка "Новые Люди" -->
+                <div class="party-card">
+                    <img src="/logo/Newpeople_logo.svg.png" alt="Логотип Новых Людей" class="party-logo">
+                    <h3>Новые Люди</h3>
+                    <p>Партия, основанная в 2020 году. Основные направления работы включают поддержку молодежи, развитие технологий и социальных проектов.</p>
+                    <ul class="key-figures">
+                        <li>Алексей Нечаев  — председатель партии</li>
+                        <li>Александр Даванков — заместитель председателя</li>
+                    </ul>
+                    <a href="https://newpeople.ru/2025/" target="_blank" class="party-link">Официальный сайт</a>
+                </div>
+            </div>
         </section>
     </main>
 
