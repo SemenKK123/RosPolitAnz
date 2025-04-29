@@ -93,9 +93,10 @@ section h2 {
 /* Графики */
 #pollChart {
     max-width: 100%;
-    height: auto;
+    height: 400px; /* Добавьте фиксированную высоту */
     margin: 1rem 0;
 }
+
 
 /* Таблицы */
 table {

@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Рейтинги</title>
+    <title>Рейтинги партий</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
-        <h1>Мониторинг политических партий РФ</h1>
+        <h1>Рейтинги политических партий РФ</h1>
         <nav>
             <ul>
                 <li><a href="index.html">Главная</a></li>
@@ -23,9 +23,24 @@
     </header>
 
     <main>
-        <section id="ratings-section">
+        <section>
             <h2>Результаты опроса</h2>
-            <canvas id="pollChart"></canvas>
+            <canvas id="pollChart" width="400" height="200"></canvas>
+        </section>
+
+        <section>
+            <h2>Таблица рейтингов</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Партия</th>
+                        <th>Количество голосов</th>
+                    </tr>
+                </thead>
+                <tbody id="ratingTableBody">
+                    <!-- Данные будут загружены динамически -->
+                </tbody>
+            </table>
         </section>
     </main>
 
@@ -38,31 +53,31 @@
         async function loadPollResults() {
             try {
                 const response = await fetch('http://localhost:3000/api/poll/results');
-                if (!response.ok) throw new Error('Ошибка при загрузке данных.');
+                if (!response.ok) {
+                    throw new Error('Не удалось загрузить результаты опроса');
+                }
 
                 const results = await response.json();
-
-                // Обновляем график
                 updatePollChart(results);
+                updateRatingTable(results);
             } catch (error) {
-                console.error('Ошибка при загрузке результатов:', error);
+                console.error('Ошибка при загрузке результатов опроса:', error);
+                alert('Не удалось загрузить результаты опроса. Пожалуйста, попробуйте позже.');
             }
         }
 
         // Функция для обновления графика
         function updatePollChart(results) {
-            const parties = results.map(item => item.party); // Английские названия партий
+            const parties = results.map(item => item.party);
             const votes = results.map(item => item.votes);
 
             const ctx = document.getElementById('pollChart').getContext('2d');
-            if (window.pollChart) window.pollChart.destroy(); // Удаляем предыдущий график
-
-            window.pollChart = new Chart(ctx, {
+            new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: parties,
                     datasets: [{
-                        label: 'Голоса',
+                        label: 'Количество голосов',
                         data: votes,
                         backgroundColor: [
                             'rgba(0, 123, 255, 0.7)',
@@ -71,19 +86,20 @@
                             'rgba(75, 192, 192, 0.7)',
                             'rgba(153, 102, 255, 0.7)',
                         ],
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1,
                     }],
                 },
                 options: {
                     responsive: true,
                     plugins: {
                         legend: {
-                            display: false, // Убираем легенду
+                            position: 'top',
                         },
                         tooltip: {
-                            enabled: true, // Включаем подсказки
                             callbacks: {
                                 label: function(context) {
-                                    return `${context.dataset.label}: ${context.raw} голосов`;
+                                    return `${context.label}: ${context.parsed.y} голосов`;
                                 },
                             },
                         },
@@ -93,13 +109,13 @@
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Голоса',
+                                text: 'Количество голосов',
                             },
                         },
                         x: {
                             title: {
                                 display: true,
-                                text: 'Партии',
+                                text: 'Политические партии',
                             },
                         },
                     },
@@ -107,8 +123,26 @@
             });
         }
 
+        // Функция для обновления таблицы рейтингов
+        function updateRatingTable(results) {
+            const tableBody = document.getElementById('ratingTableBody');
+            tableBody.innerHTML = ''; // Очищаем старые данные
+
+            results.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.party}</td>
+                    <td>${item.votes} голосов</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
         // Инициализация загрузки результатов опроса
         loadPollResults();
+
+        // Автоматическое обновление каждые 10 секунд
+        setInterval(loadPollResults, 10000); // 10000 миллисекунд = 10 секунд
     </script>
 </body>
 </html>

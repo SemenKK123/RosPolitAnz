@@ -9,7 +9,7 @@ const app = express();
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors());  // Это позволит вашему фронтенду обращаться к серверу с другого порта
 
 // Подключение к MongoDB
 mongoose.connect('mongodb://localhost:27017/political_monitoring', {
@@ -91,11 +91,13 @@ app.post('/api/poll/vote', authenticateToken, async (req, res) => {
         const { party } = req.body;
         const userId = req.user.userId;
 
+        // Проверяем, проголосовал ли пользователь в этом месяце
         const userVote = await UserVote.findOne({ userId });
         if (userVote && userVote.lastVoteDate.getMonth() === new Date().getMonth()) {
             return res.status(403).json({ message: 'Вы уже проголосовали в этом месяце.' });
         }
 
+        // Обновляем или создаем запись о голосе пользователя
         if (!userVote) {
             await new UserVote({ userId, lastVoteDate: new Date() }).save();
         } else {
@@ -103,6 +105,7 @@ app.post('/api/poll/vote', authenticateToken, async (req, res) => {
             await userVote.save();
         }
 
+        // Обновляем количество голосов для партии
         const poll = await Poll.findOne({ party });
         if (poll) {
             poll.votes += 1;
