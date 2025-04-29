@@ -9,7 +9,7 @@ const app = express();
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());  // Это позволит вашему фронтенду обращаться к серверу с другого порта
+app.use(cors());
 
 // Подключение к MongoDB
 mongoose.connect('mongodb://localhost:27017/political_monitoring', {
@@ -91,13 +91,11 @@ app.post('/api/poll/vote', authenticateToken, async (req, res) => {
         const { party } = req.body;
         const userId = req.user.userId;
 
-        // Проверяем, проголосовал ли пользователь в этом месяце
         const userVote = await UserVote.findOne({ userId });
         if (userVote && userVote.lastVoteDate.getMonth() === new Date().getMonth()) {
             return res.status(403).json({ message: 'Вы уже проголосовали в этом месяце.' });
         }
 
-        // Обновляем или создаем запись о голосе пользователя
         if (!userVote) {
             await new UserVote({ userId, lastVoteDate: new Date() }).save();
         } else {
@@ -105,7 +103,6 @@ app.post('/api/poll/vote', authenticateToken, async (req, res) => {
             await userVote.save();
         }
 
-        // Обновляем количество голосов для партии
         const poll = await Poll.findOne({ party });
         if (poll) {
             poll.votes += 1;
@@ -123,7 +120,21 @@ app.post('/api/poll/vote', authenticateToken, async (req, res) => {
 app.get('/api/poll/results', async (req, res) => {
     try {
         const results = await Poll.find();
-        res.json(results);
+
+        const partyNames = {
+            edinaya_rossiya: 'Единая Россия',
+            kprf: 'КПРФ',
+            ldpr: 'ЛДПР',
+            sprr: 'Справедливая Россия',
+            novye_lyudi: 'Новые люди',
+        };
+
+        const translatedResults = results.map(result => ({
+            party: partyNames[result.party] || result.party, // переводим, если есть перевод
+            votes: result.votes,
+        }));
+
+        res.json(translatedResults);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Ошибка сервера.' });
